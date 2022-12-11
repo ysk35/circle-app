@@ -3,7 +3,7 @@ from flask import request
 import os
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
-from linebot.models import (MessageEvent, TextMessage, TextSendMessage,)
+from linebot.models import (FollowEvent, MessageEvent, TextMessage, TextSendMessage,)
 
 # generate instance
 app = Flask(__name__)
@@ -48,6 +48,14 @@ def handle_message(event):
   line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text=replyText))
+
+@handler.add(FollowEvent)# FollowEventをimportするのを忘れずに！
+def follow_message(event):# event: LineMessagingAPIで定義されるリクエストボディ
+  # print(event)
+  if event.type == "follow":# フォロー時のみメッセージを送信
+    line_bot_api.reply_message(
+      event.reply_token,# イベントの応答に用いるトークン
+      TextSendMessage(text="フォローありがとうございます！"))
 
 if __name__ == "__main__":
   app.run()
