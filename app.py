@@ -40,9 +40,13 @@ def callback():
 # handle message from LINE
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+  if(event.message.text == "あ"):
+    replyText = "「あ」って送りましたね？"
+  else:
+    replyText = "ok!!!!!!"
   line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text="test"))
+    TextSendMessage(text=replyText))
 
 if __name__ == "__main__":
   app.run()
