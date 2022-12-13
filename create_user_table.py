@@ -12,8 +12,5 @@ class User(Base):
   name = Column('name', String(200))
   student_number= Column('student_number', String(200))
 
-  def __init__(self, name):
-    self.name = name
-
 if __name__ == "__main__":
-    Base.metadata.create_all(bind=ENGINE)
+  Base.metadata.create_all(bind=ENGINE)
