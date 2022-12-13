@@ -44,16 +44,16 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
   messageText = event.message.text.split("\n")
-  # print(messageText)
-  print(messageText[0])
-  print(messageText[1])
+  # # print(messageText)
+  # print(messageText[0])
+  # print(messageText[1])
   # replyText = "test"
   user = session.query(User).\
     filter(User.line_user_id == event.source.user_id).\
     first()
-  print(user.line_user_id)
-  print(user.name)
-  print(user.student_number)
+  # print(user.line_user_id)
+  # print(user.name)
+  # print(user.student_number)
   if not user.name and not user.student_number:
     if user.is_confirm == False:
       user.is_confirm = True
