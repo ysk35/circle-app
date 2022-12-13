@@ -51,8 +51,10 @@ def handle_message(event):
   user = session.query(User).\
     filter(User.line_user_id == event.source.user_id).\
     first()
-  print(user)
-  if not User.name:
+  print(user.line_user_id)
+  print(user.name)
+  print(user.student_number)
+  if not user.name:
     replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか"
   # if(event.message.text == ):
   #   replyText = "「あ」って送りましたね？"
