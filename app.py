@@ -52,7 +52,11 @@ def handle_message(event):
   #   replyText = "「あ」って送りましたね？"
   # else:
   #   replyText = event.source.user_id
-  print(event.message.text)
+  messageText = event.message.text.split("\n")
+  print(messageText)
+  print(messageText[0])
+  print(messageText[1])
+  # print(event.message.text)
   line_bot_api.reply_message(
     event.reply_token,
     TextSendMessage(text=event.message.text))
