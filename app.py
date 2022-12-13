@@ -4,6 +4,7 @@ import os
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (FollowEvent, MessageEvent, TextMessage, TextSendMessage,)
+import psycopg2
 
 # generate instance
 app = Flask(__name__)
