@@ -8,7 +8,7 @@ from setting import ENGINE
 class Attendance(Base):
   __tablename__ = "attendance"
   id = Column('id', Integer, primary_key = True)
-  user_id = Column('usser_id', Integer)
+  user_id = Column('user_id', Integer)
   name = Column('name', String(200))
   date = Column('date', Date)
 
