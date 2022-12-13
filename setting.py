@@ -3,7 +3,7 @@ from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 import os
 # postgresqlのDBの設定
-DATABASE = "os.environ['DATABASE_URL']"
+DATABASE = os.environ['DATABASE_URL']
 
 # Engineの作成
 ENGINE = create_engine(
