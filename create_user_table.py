@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from setting import Base
 from setting import ENGINE
 
@@ -10,6 +10,7 @@ class User(Base):
   id = Column('id', Integer, primary_key = True)
   line_user_id = Column('line_user_id', String(200))
   name = Column('name', String(200))
+  is_confirm = Column('is_confirm', Boolean)
   student_number= Column('student_number', String(200))
 
 if __name__ == "__main__":
