@@ -54,7 +54,7 @@ def handle_message(event):
   print(user.line_user_id)
   print(user.name)
   print(user.student_number)
-  if not user.name and not user.student:
+  if not user.name and not user.student_number:
     if user.is_confirm == False:
       replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
     elif user.is_confirm == True:
