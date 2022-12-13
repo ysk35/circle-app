@@ -44,7 +44,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
   # user = session.query(User).\
-  #   filter(User.user_id == event.source.user_id).\
+  #   filter(User.line_user_id == event.source.user_id).\
   #   first()
   # if not User.name:
   #   replyText = "名前は"
@@ -64,7 +64,7 @@ def follow_message(event):# event: LineMessagingAPIで定義されるリクエ�
       event.reply_token,# イベントの応答に用いるトークン
       TextSendMessage(text="フォローありがとうございます！"))
 
-  session.add(User(user_id = event.source.user_id))
+  session.add(User(line_user_id = event.source.user_id))
   session.commit()
 
 if __name__ == "__main__":
