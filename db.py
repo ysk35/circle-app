@@ -17,12 +17,12 @@ class User(Base):
   name = Column('name', String(200))
   student_number= Column('student_number', String(200))
 
-class Attendance(Base):
-  __tablename__ = "attendance"
-  id = Column('id', Integer, primary_key = True)
-  user_id = Column('usser_id', Integer)
-  name = Column('name', String(200))
-  date = Column('date', Date)
+# class Attendance(Base):
+#   __tablename__ = "attendance"
+#   id = Column('id', Integer, primary_key = True)
+#   user_id = Column('usser_id', Integer)
+#   name = Column('name', String(200))
+#   date = Column('date', Date)
 
 # テーブル作成
 Base.metadata.create_all(bind=engine)
