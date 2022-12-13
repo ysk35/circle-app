@@ -2,14 +2,14 @@ from sqlalchemy import *
 from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 # postgresqlのDBの設定
-DATABASE = "postgresql://postgres:@192.168.1.19:5432/flask_tutorial"
+DATABASE = "postgres://dkfqwbueaxidfc:f37118ce7a2fcd412122ab2382ee510ebbc0284cf71d58d9a34732ff79449723@ec2-3-229-161-70.compute-1.amazonaws.com:5432/da6uc9gaenvvku"
 
 # Engineの作成
 ENGINE = create_engine(
-    DATABASE,
-    encoding="utf-8",
-    # TrueにするとSQLが実行される度に出力される
-    echo=True
+  DATABASE,
+  encoding="utf-8",
+  # TrueにするとSQLが実行される度に出力される
+  echo=True
 )
 
 # Sessionの作成
