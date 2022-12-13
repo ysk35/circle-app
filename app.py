@@ -4,7 +4,9 @@ import os
 from linebot import (LineBotApi, WebhookHandler)
 from linebot.exceptions import (InvalidSignatureError)
 from linebot.models import (FollowEvent, MessageEvent, TextMessage, TextSendMessage,)
-import psycopg2
+from UserModel import User
+from AttendanceModel import Attendance
+from setting import session
 
 # generate instance
 app = Flask(__name__)
@@ -41,22 +43,29 @@ def callback():
 # handle message from LINE
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-  print(event.source.user_id)
-  if(event.message.text == "あ"):
-    replyText = "「あ」って送りましたね？"
-  else:
-    replyText = event.source.user_id
+  # user = session.query(User).\
+  #   filter(User.user_id == event.source.user_id).\
+  #   first()
+  # if not User.name:
+  #   replyText = "名前は"
+  # if(event.message.text == ):
+  #   replyText = "「あ」って送りましたね？"
+  # else:
+  #   replyText = event.source.user_id
+  print(event.message.text)
   line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=replyText))
+    TextSendMessage(text=event.message.text))
 
 @handler.add(FollowEvent)# FollowEventをimportするのを忘れずに！
 def follow_message(event):# event: LineMessagingAPIで定義されるリクエストボディ
-  # print(event)
   if event.type == "follow":# フォロー時のみメッセージを送信
     line_bot_api.reply_message(
       event.reply_token,# イベントの応答に用いるトークン
       TextSendMessage(text="フォローありがとうございます！"))
+
+  session.add(User(user_id = event.source.user_id))
+  session.commit()
 
 if __name__ == "__main__":
   app.run()
