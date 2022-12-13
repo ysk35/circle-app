@@ -58,7 +58,7 @@ def handle_message(event):
     if user.is_confirm == False:
       user.is_confirm = True
       session.commit()
-      replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
+      replyText = "学籍番号：" + messageText[0] + "\n名前：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
     elif user.is_confirm == True:
       if event.message.text == "はい":
         replyText = "登録しました"
