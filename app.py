@@ -54,8 +54,22 @@ def handle_message(event):
   print(user.line_user_id)
   print(user.name)
   print(user.student_number)
-  if not user.name:
-    replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか"
+  if not user.name and not user.student:
+    if user.is_confirm == False:
+      replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
+    elif user.is_confirm == True:
+      if event.message.text == "はい":
+        replyText = "登録しました"
+      elif event.message.text == "いいえ":
+        replyText = "以下のような形式で送信してください！！\
+        例:\
+        1行目：74✖️✖️✖️✖️✖️\
+        2行目：理科大太郎"
+        user.is_confirm = False
+        session.commit()
+      else:
+        replyText = "「はい」又は「いいえ」で答えてください"
+
   # if(event.message.text == ):
   #   replyText = "「あ」って送りましたね？"
   else:
@@ -72,7 +86,7 @@ def follow_message(event):# event: LineMessagingAPIで定義されるリクエ�
       event.reply_token,# イベントの応答に用いるトークン
       TextSendMessage(text="フォローありがとうございます！"))
 
-  session.add(User(line_user_id = event.source.user_id))
+  session.add(User(line_user_id = event.source.user_id, is_confirm = False))
   session.commit()
 
 if __name__ == "__main__":
