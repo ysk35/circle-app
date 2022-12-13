@@ -13,4 +13,5 @@ class Attendance(Base):
   date = Column('date', Date)
 
 if __name__ == "__main__":
+  Base.metadata.drop_all(ENGINE)
   Base.metadata.create_all(bind=ENGINE)
