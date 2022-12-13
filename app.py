@@ -43,23 +43,25 @@ def callback():
 # handle message from LINE
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-  # user = session.query(User).\
-  #   filter(User.line_user_id == event.source.user_id).\
-  #   first()
-  # if not User.name:
-  #   replyText = "名前は"
-  # if(event.message.text == ):
-  #   replyText = "「あ」って送りましたね？"
-  # else:
-  #   replyText = event.source.user_id
   messageText = event.message.text.split("\n")
-  print(messageText)
+  # print(messageText)
   print(messageText[0])
   print(messageText[1])
+  # replyText = "test"
+  user = session.query(User).\
+    filter(User.line_user_id == event.source.user_id).\
+    first()
+  print(user)
+  if not User.name:
+    replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか"
+  # if(event.message.text == ):
+  #   replyText = "「あ」って送りましたね？"
+  else:
+    replyText = event.source.user_id
   # print(event.message.text)
   line_bot_api.reply_message(
     event.reply_token,
-    TextSendMessage(text=event.message.text))
+    TextSendMessage(text=replyText))
 
 @handler.add(FollowEvent)# FollowEventをimportするのを忘れずに！
 def follow_message(event):# event: LineMessagingAPIで定義されるリクエストボディ
