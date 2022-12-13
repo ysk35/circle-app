@@ -56,6 +56,8 @@ def handle_message(event):
   print(user.student_number)
   if not user.name and not user.student_number:
     if user.is_confirm == False:
+      user.is_confirm = True
+      session.commit()
       replyText = "名前：" + messageText[0] + "\n学籍番号：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
     elif user.is_confirm == True:
       if event.message.text == "はい":
