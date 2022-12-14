@@ -7,6 +7,7 @@ from linebot.models import (FollowEvent, MessageEvent, TextMessage, TextSendMess
 from UserModel import User
 from AttendanceModel import Attendance
 from setting import session
+import datetime
 
 # generate instance
 app = Flask(__name__)
@@ -45,37 +46,47 @@ def callback():
 def handle_message(event):
   messageText = event.message.text.split("\n")
   # # print(messageText)
-  # print(messageText[0])
-  # print(messageText[1])
   # replyText = "test"
   user = session.query(User).\
     filter(User.line_user_id == event.source.user_id).\
     first()
   # print(user.line_user_id)
-  # print(user.name)
-  # print(user.student_number)
   if not user.name and not user.student_number:
     if user.is_confirm == False:
-      user.is_confirm = True
-      session.commit()
-      replyText = "学籍番号：" + messageText[0] + "\n名前：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
+      if not messageText[1]:
+        replyText = "2行で以下のような形式で回答してください\n例:\n1行目：74○○○○○\n2行目：理科大太郎"
+      else:
+        user.is_confirm = True
+        session.commit()
+        replyText = "学籍番号：" + messageText[0] + "\n名前：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
     elif user.is_confirm == True:
       if event.message.text == "はい":
+        user.student_number = messageText[0]
+        user.name = messageText[1]
+        session.commit()
         replyText = "登録しました"
       elif event.message.text == "いいえ":
-        replyText = "以下のような形式で送信してください！！\
-        例:\
-        1行目：74✖️✖️✖️✖️✖️\
-        2行目：理科大太郎"
+        replyText = "以下のような形式で送信してください\n例:\n1行目：74○○○○○\n2行目：理科大太郎"
         user.is_confirm = False
         session.commit()
       else:
         replyText = "「はい」又は「いいえ」で答えてください"
-
-  # if(event.message.text == ):
-  #   replyText = "「あ」って送りましたね？"
   else:
-    replyText = event.source.user_id
+    if event.message.text == "出席":
+      dt_now = datetime.datetime.now()
+      dt_now_ar = dt_now.strftime('%Y/%m/%d')
+      attendance = session.query(Attendance).\
+        filter(Attendance.user_id == user.id, Attendance.date == dt_now_ar).\
+        first()
+      if not attendance:
+        session.add(Attendance(user_id = user.id, name = user.name, date = dt_now_ar))
+        session.commit()
+        replyText = "出席登録が完了しました"
+      else:
+        replyText = "出席登録が完了しています"
+    else:
+      replyText = "出席登録以外の情報は送信しないでください"
+
   # print(event.message.text)
   line_bot_api.reply_message(
     event.reply_token,
