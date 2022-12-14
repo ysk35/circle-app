@@ -50,8 +50,7 @@ def handle_message(event):
   user = session.query(User).\
     filter(User.line_user_id == event.source.user_id).\
     first()
-  # print(user.line_user_id)
-  if not user.name and not user.student_number:
+  if (not user.name and not user.student_number) or user.is_temporary == True:
     if user.is_confirm == False:
       if not messageText[1]:
         replyText = "2行で以下のような形式で回答してください\n例:\n1行目：74○○○○○\n2行目：理科大太郎"
@@ -59,10 +58,13 @@ def handle_message(event):
         user.is_confirm = True
         user.student_number = messageText[0]
         user.name = messageText[1]
+        user.is_temporary = True
         session.commit()
         replyText = "学籍番号：" + messageText[0] + "\n名前：" + messageText[1] + "\nでよろしいでしょうか？\n「はい」又は「いいえ」で答えてください"
     elif user.is_confirm == True:
       if event.message.text == "はい":
+        user.is_temporary = False
+        session.commit()
         replyText = "登録しました"
       elif event.message.text == "いいえ":
         replyText = "以下のような形式で送信してください\n例:\n1行目：74○○○○○\n2行目：理科大太郎"
