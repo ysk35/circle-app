@@ -1,0 +1,20 @@
+FROM python:3.9-slim-buster
+
+ENV PYTHONBURRERED=1
+
+WORKDIR /usr/src/app
+
+ENV FLASK_APP=app
+
+COPY . /usr/src/app/
+
+COPY requirements.txt .
+
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install sqlite3
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+EXPOSE 5001
+
+CMD ["flask", "run", "--host", "0.0.0.0"]

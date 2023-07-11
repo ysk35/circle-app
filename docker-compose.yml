@@ -1,10 +1,20 @@
-version: "3"
+version: "3.9"
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile_backend
     ports:
       - "5001:5000"
-    container_name: backend
     volumes:
       - ./backend:/usr/src/app
-    command: flask run --host=0.0.0.0
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile_frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/public:/usr/src/app/public
+      - ./frontend/src:/usr/src/app/src
