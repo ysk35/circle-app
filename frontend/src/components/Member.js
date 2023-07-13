@@ -12,6 +12,7 @@ function Member(){
   const Submit = async() => {
     const formdata = new FormData();
     formdata.append('date', date);
+    console.log(date);
     const requestOptions = {
       method: "POST",
       body: formdata,
@@ -19,7 +20,7 @@ function Member(){
 
     const response = await fetch(URL, requestOptions);
     const data = await response.json()
-    // console.log(data['users'])
+    console.log(data['users'])
     navigate('/memberlist', {state: {users: data['users']}})
   }
   const handleSubmit = (event) => {

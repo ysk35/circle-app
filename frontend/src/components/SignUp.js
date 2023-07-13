@@ -23,6 +23,8 @@ function SignUp(){
     console.log(data["is_success"]);
     if(data["is_success"]){
       navigate("/login")
+    }else{
+      alert(data["error"]);
     }
   }
   const handleSubmit = (event) => {
@@ -48,6 +50,7 @@ function SignUp(){
             type="email"
             placeholder="email"
             onChange={(event) => handleChangeEmail(event)}
+            value={email}
           />
         </div>
         <div>
@@ -58,10 +61,11 @@ function SignUp(){
             type="password"
             placeholder="password"
             onChange={(event) => handleChangePassword(event)}
+            value={password}
           />
         </div>
         <div>
-          <button className="form-btn">登録</button>
+          <button disabled={!email | !password} className="form-btn">登録</button>
         </div>
         <Link to='/login'>ログインはこちら</Link>
       </form>

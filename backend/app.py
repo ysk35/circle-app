@@ -40,12 +40,12 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
   messageText = event.message.text.split("\n")
-  user = db.query(User).\
+  user = User.query.\
     filter(User.line_user_id == event.source.user_id).\
     first()
   if (not user.name and not user.student_number) or user.is_temporary == True:
     if user.is_confirm == False:
-      if not messageText[1]:
+      if len(messageText) != 2:
         replyText = "2行で以下のような形式で回答してください\n例:\n1行目：74○○○○○\n2行目：理科大太郎"
       else:
         user.is_confirm = True
@@ -75,7 +75,7 @@ def handle_message(event):
         filter(Attendance.user_id == user.id, Attendance.date == dt_now_ar).\
         first()
       if not attendance:
-        db.session.add(Attendance(user_id = user.id, name = user.name, date = dt_now_ar))
+        db.session.add(Attendance(user_id = user.id, name = user.name, student_number = user.student_number, date = dt_now_ar))
         db.session.commit()
         replyText = "出席登録が完了しました"
       else:
@@ -97,13 +97,12 @@ def follow_message(event):
   db.session.add(User(line_user_id = event.source.user_id, is_confirm = False))
   db.session.commit()
 
-
 @app.route('/signup', methods=['POST'])
 def signup():
   try:
     email = request.form.get('email')
     password = request.form.get('password')
-    admin_user = AdminUser(email=email, password=password)
+    admin_user = AdminUser(email=email, password=generate_password_hash(password))
     db.session.add(admin_user)
     db.session.commit()
     return jsonify({"is_success": True, "error": ""}), 200
@@ -114,20 +113,16 @@ def signup():
 def login():
   email = request.form.get('email')
   password = request.form.get('password')
-
   admin_user = AdminUser.query.filter_by(email=email).first()
 
-  if check_password_hash(admin_user.password, password):
-    login_user(admin_user)
-    return jsonify({"is_success": True, "error": ""}), 200
+  if admin_user == None:
+    if check_password_hash(admin_user.password, password):
+      login_user(admin_user)
+      return jsonify({"is_success": True, "error": ""}), 200
+    else:
+      return jsonify({"is_success": False, "error": "パスワードが正しくありません"}), 200
   else:
     return jsonify({"is_success": False, "error": "登録されていません"}), 200
-
-@app.route("/logout", methods=["GET"])
-def logout():
-  logout_user()
-
-  return jsonify({}), 200
 
 @app.route('/getmember', methods=['POST'])
 def get_member():
@@ -135,12 +130,14 @@ def get_member():
     list = []
     attend_user = Attendance.query.filter_by(date=request.form.get('date')).all()
     for user in attend_user:
-      list.append(user.name)
+      list.append({"name": user.name, "student_number": user.student_number})
     print(list)
     return jsonify({'users': list}), 200
   except:
     return jsonify({}), 400
 
-@app.route("/")
-def index():
-  return "index page"
+@app.route("/logout")
+@login_required
+def logout():
+  logout_user()
+  return jsonify({"is_success": True, "error": ""}), 200

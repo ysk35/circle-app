@@ -18,6 +18,8 @@ class User(db.Model):
   id = db.Column(db.Integer, primary_key = True)
   line_user_id = db.Column(db.String(200))
   name = db.Column(db.String(200))
+  is_confirm = db.Column(db.Boolean)
+  is_temporary = db.Column(db.Boolean)
   student_number = db.Column(db.String(200))
 
 class Attendance(db.Model):
@@ -25,6 +27,7 @@ class Attendance(db.Model):
   id = db.Column(db.Integer, primary_key = True)
   user_id = db.Column(db.Integer)
   name = db.Column(db.String(200))
+  student_number = db.Column(db.String(200))
   date = db.Column(db.Date)
 
 class AdminUser(UserMixin, db.Model):
@@ -35,5 +38,5 @@ class AdminUser(UserMixin, db.Model):
 
 # テーブル作成
 if __name__ == '__main__':
-  db.create_all()
-  # db.app_context().push()
+  with app.app_context():
+    db.create_all()
