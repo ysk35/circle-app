@@ -6,7 +6,9 @@ import '../es/css/Member.css';
 function Member(){
 
   const [date, setDate] = useState(new Date());
-  const URL = 'http://localhost:5001/getmember';
+
+  const URL = process.env.REACT_APP_API_URL + '/getmember';
+
   const navigate = useNavigate();
 
   const Submit = async() => {

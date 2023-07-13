@@ -6,7 +6,7 @@ import '../es/css/Login.css';
 function Login(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const URL = 'http://localhost:5001/login'
+  const URL = process.env.REACT_APP_API_URL + "/login";
   const navigate = useNavigate();
 
   const Submit = async() => {

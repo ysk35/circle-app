@@ -6,7 +6,7 @@ import '../es/css/SignUp.css';
 function SignUp(){
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const URL = 'http://localhost:5001/signup'
+  const URL = process.env.REACT_APP_API_URL + '/signup';
   const navigate = useNavigate();
 
   const Submit = async() => {
